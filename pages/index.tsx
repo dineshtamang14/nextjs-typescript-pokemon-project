@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link';
@@ -38,8 +38,8 @@ export default function Home() {
                 <Image
                   src={`https://jherr-pokemon.s3.us-west-1.amazonaws.com/${pokemon.image}`}
                   alt={pokemon.name}
-                  width={200}
-                  height={200}
+                  width="200"
+                  height="200"
                 />
                 <h3>{pokemon.name}</h3>
             </Link>
