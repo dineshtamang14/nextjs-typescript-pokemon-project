@@ -11,7 +11,7 @@ interface Pokemon {
   name: string
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const res = await axios.get(
     "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
   );

@@ -5,7 +5,21 @@ import Image from 'next/image';
 import axios from 'axios';
 
 
-export const getServerSideProps = async ({ params }) => {
+export const getStaticPaths = async () => {
+  const res = await axios.get(
+    "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+  );
+  const pokemon = await res.data;
+
+  return {
+    path: pokemon.map((pokemon) => ({
+      params: { id: pokemon.id.toString() },
+    })),
+    fallback: false
+  }
+}
+
+export const getStaticProps = async ({ params }) => {
   const res = await axios.get(
     `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
   );
@@ -13,7 +27,8 @@ export const getServerSideProps = async ({ params }) => {
   return {
     props: {
       pokemon: await res.data,
-    }
+    },
+    revalidate: 30,
   }
 }
 
