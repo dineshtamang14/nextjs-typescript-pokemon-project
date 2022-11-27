@@ -3,25 +3,27 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link';
 import Image from 'next/image';
+import axios from 'axios';
 
-export default function Home() {
-  interface Pokemon {
-    id: number
-    image: string 
-    name: string
-  }
-  const [pokemon, setPokemon] = useState<Array<Pokemon>>([]);
+interface Pokemon {
+  id: number
+  image: string 
+  name: string
+}
 
-  useEffect(() => {
-    const getPokemon = async (): Promise<void> => {
-      const res = await fetch(
-        "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
-      );
-      setPokemon(await res.json());
+export const getServerSideProps = async () => {
+  const res = await axios.get(
+    "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+  );
+
+  return {
+    props: {
+      pokemon: await res.data
     }
-    getPokemon();
-  }, []);
+  }
+}
 
+export default function Home({ pokemon }) {
   return (
     <div className={styles.container}>
       <Head>
