@@ -5,10 +5,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import axios from 'axios';
 
-interface Pokemon {
+interface PokemonDetails {
   id: number
   image: string 
   name: string
+}
+
+interface Pokemons {
+  pokemon: Array<PokemonDetails>
 }
 
 export const getStaticProps = async () => {
@@ -23,7 +27,7 @@ export const getStaticProps = async () => {
   }
 }
 
-export default function Home({ pokemon }) {
+export default function Home(props: Pokemons) {
   return (
     <div className={styles.container}>
       <Head>
@@ -34,7 +38,7 @@ export default function Home({ pokemon }) {
 
       <h2>Pokemon List</h2>
       <div className={styles.grid}>
-        {pokemon.map((pokemon: Pokemon): JSX.Element => (
+        {props.pokemon.map((pokemon: PokemonDetails): JSX.Element => (
           <div className={styles.card} key={pokemon.id}>
             <Link href={`/pokemon/${pokemon.id}`}>
                 <Image

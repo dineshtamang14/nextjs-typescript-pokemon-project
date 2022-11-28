@@ -5,21 +5,48 @@ import Image from 'next/image';
 import axios from 'axios';
 
 
+type Details = {
+  name: string
+  value: number
+}
+
+interface PokemonDetails {
+  name: string
+  type: Array<string>
+  stats: Array<Details>
+  image: string
+}
+
+interface Pokemons {
+  pokemon: PokemonDetails
+}
+
+interface PokemonDetails {
+  id: number
+  image: string 
+  name: string
+}
+
+type FetchPokemon = {
+  params: {
+    id: string
+  }
+}
+
 export const getStaticPaths = async () => {
   const res = await axios.get(
     "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
   );
   const pokemon = await res.data;
-
   return {
-    path: pokemon.map((pokemon) => ({
+    paths: pokemon.map((pokemon: PokemonDetails) => ({
       params: { id: pokemon.id.toString() },
     })),
     fallback: false
   }
 }
 
-export const getStaticProps = async ({ params }) => {
+export const getStaticProps = async ({ params }: FetchPokemon) => {
   const res = await axios.get(
     `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
   );
@@ -33,11 +60,11 @@ export const getStaticProps = async ({ params }) => {
   }
 }
 
-export default function Details({ pokemon }){
+export default function Details(props: Pokemons){
     return (
       <div>
       <Head>
-        <title>{pokemon.name}</title>
+        <title>{props.pokemon.name}</title>
       </Head>
       <div>
         <Link href="/">
@@ -48,15 +75,15 @@ export default function Details({ pokemon }){
         <div>
           <Image
             className={styles.picture}
-            src={`https://jherr-pokemon.s3.us-west-1.amazonaws.com/${pokemon.image}`}
-            alt={pokemon.name}
+            src={`https://jherr-pokemon.s3.us-west-1.amazonaws.com/${props.pokemon.image}`}
+            alt={props.pokemon.name}
             width="200"
             height="200"
           />
         </div>
         <div>
-          <div className={styles.name}>{pokemon.name}</div>
-          <div className={styles.type}>{pokemon.type.join(", ")}</div>
+          <div className={styles.name}>{props.pokemon.name}</div>
+          <div className={styles.type}>{props.pokemon.type.join(", ")}</div>
           <table>
             <thead className={styles.header}>
               <tr>
@@ -65,10 +92,10 @@ export default function Details({ pokemon }){
               </tr>
             </thead>
             <tbody>
-              {pokemon.stats.map(({ name, value }) => (
-                <tr key={name}>
-                  <td className={styles.attribute}>{name}</td>
-                  <td>{value}</td>
+              {props.pokemon.stats.map((i: Details) => (
+                <tr key={i.name}>
+                  <td className={styles.attribute}>{i.name}</td>
+                  <td>{i.value}</td>
                 </tr>
               ))}
             </tbody>
