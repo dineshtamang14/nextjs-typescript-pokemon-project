@@ -56,7 +56,7 @@ export default function Home(props: Pokemons) {
       </Head>
 
       <Link href="https://dineshtamang.tech">
-        <a target="_blank" rel="noopener noreferrer">
+        <a target="_blank">
           <h2>Pokemon List</h2>
         </a>
       </Link>
