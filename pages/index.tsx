@@ -55,11 +55,11 @@ export default function Home(props: Pokemons) {
 	      <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1130796628997156864/HFXo5m91_400x400.jpg" />
       </Head>
 
-      <Link href="https://dineshtamang.tech">
-        <a target="_blank">
-          <h2>Pokemon List</h2>
-        </a>
-      </Link>
+
+      <a target="_blank" href="https://dineshtamang.tech/" rel="noopener noreferrer">
+        <h2>Pokemon List</h2>
+      </a>
+
       
       <div className={styles.grid}>
         {props.pokemon.map((pokemon: PokemonDetails): JSX.Element => (
